@@ -1,0 +1,50 @@
+name: Python package test
+on:
+  push:
+    branches: [ 'main' ]
+jobs:
+  bump-version:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.11.2]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            token: ${{ secrets.DEPLOY_TOKEN }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.5.1
+      - name: Bump version
+        run: poetry version prerelease
+      - name: Commit version
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email '<>'
+          export NEW_VERSION=v$(poetry version -s)
+          git commit -am "[skip actions] Bumping to version $NEW_VERSION"
+          git push
+  publish:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.11.2]
+    runs-on: ${{ matrix.os }}
+    needs: bump-version
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and publish to pypi test
+        uses: JRubics/poetry-publish@v1.17
+        with:
+          python_version: "3.11.2"
+          poetry_version: "==1.6.1" # (PIP version specifier syntax)
+          pypi_token: ${{ secrets.PYPI_TOKEN_TEST }}
+          repository_name: "testpypi"
+          repository_url: "https://test.pypi.org/legacy/"
+          allow_poetry_pre_release: "yes"
+          ignore_dev_requirements: "yes"
