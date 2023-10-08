@@ -1,0 +1,37 @@
+# adapted from FastAPI's deploy-docs.yml at https://github.com/tiangolo/fastapi
+name: Deploy Docs
+on:
+  workflow_run:
+    workflows:
+      - Build Docs
+    types:
+      - completed
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - uses: actions/checkout@v3
+      - name: Clean site
+        run: |
+          rm -rf ./site
+          mkdir ./site
+      - name: Download Artifact Docs
+        id: download
+        uses: dawidd6/action-download-artifact@v2.27.0
+        with:
+          if_no_artifact_found: ignore
+          github_token: ${{ secrets.DOWNLOAD_ARTIFACTS }}
+          workflow: build-docs.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          name: docs-site
+          path: ./site/
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.DEPLOY_TOKEN }}
+          publish_dir: ./site
