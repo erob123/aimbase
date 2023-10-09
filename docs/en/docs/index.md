@@ -5,9 +5,9 @@
 
 ---
 
-**Documentation**: <a href="https://aimbase.erob.io/" target="_blank">aimbase.erob.io</a>
+**Documentation**: <a href="https://aimbase.erob.io/" class="external-link" target="_blank">aimbase.erob.io</a>
 
-**Source Code**: <a href="https://github.com/erob123/aimbase" target="_blank">github.com/erob123/aimbase</a>
+**Source Code**: <a href="https://github.com/erob123/aimbase" class="external-link" target="_blank">github.com/erob123/aimbase</a>
 
 ---
 
@@ -23,7 +23,7 @@ By using `Aimbase`, you will notice:
 - **Fewer Unit Tests**: your application will be built on a foundation that is designed to be correct, reducing the need for extensive unit testing. Complete code coverage can be achieved with a handful of unit tests.
 - **Easy**: Designed to be easy to use and learn. Less time reading docs.
 - **Extensible**: `Aimbase` is built to be modular, and as such is easy to extend so that you can have your own custom, realizable opinions and abstractions. Frameworks such as **YourFramework** and **Chainbase** are built on top of `Aimbase` in this way.
-- **Standards-based**: Based on FastAPI, which itself is based on (and fully compatible with) the open standards for APIs: <a href="https://github.com/OAI/OpenAPI-Specification" class="external-link" target="_blank">OpenAPI</a> (previously known as Swagger) and <a href="https://json-schema.org/" class="external-link" target="_blank">JSON Schema</a)
+- **Standards-based**: Based on FastAPI, which itself is based on (and fully compatible with) the open standards for APIs: <a href="https://github.com/OAI/OpenAPI-Specification" class="external-link" target="_blank">OpenAPI</a> (previously known as Swagger) and <a href="https://json-schema.org/" class="external-link" target="_blank">JSON Schema</a>
 
 ## Requirements
 
@@ -35,10 +35,12 @@ By using `Aimbase`, you will notice:
 
 <div class="termy">
 
-````console
+```console
 $ pip install aimbase
 
 ---> 100%
+```
+
 </div>
 
 ## Example
@@ -108,7 +110,7 @@ auto_app = app_base.get_autowired_app()
 
 # core underlying app
 app = app_base.get_core_app()
-````
+```
 
 ### Setup the database and MinIO
 
@@ -116,7 +118,7 @@ If you already have a PostgreSQL database and MinIO running, you can skip this s
 
 If not, we will launch them via local containers:
 
-1. First, make sure that you have docker installed and running. If you don't, <a href="https://docs.docker.com/get-docker/" target="_blank">you can install it by following the directions at this link</a>.
+1. First, make sure that you have docker installed and running. If you don't, <a href="https://docs.docker.com/get-docker/" class="external-link" target="_blank">you can install it by following the directions at this link</a>.
 
 1. Download the `aimbase` docker-compose file:
 
@@ -196,7 +198,7 @@ Congratulations! You have just created your first fully-functional REST API with
 
 ### Check it
 
-#### Step 1: Send a test sentence to the API
+#### Send a test sentence to the API
 
 In the interactive docs (or using `curl` if you prefer), go to the POST operation for `/sentences/encode` and try it. Send this JSON body:
 

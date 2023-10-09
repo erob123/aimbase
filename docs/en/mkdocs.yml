@@ -42,7 +42,7 @@ plugins:
   markdownextradata:
     data: ../en/data
 nav:
-- aimbase: index.md
+- Aimbase: index.md
 - contributing.md
 - release-notes.md
 markdown_extensions:
