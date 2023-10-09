@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              aimbase
+              Aimbase
             
           </span>
         </div>
@@ -256,12 +256,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          aimbase
+          Aimbase
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
-        aimbase
+        Aimbase
       </a>
       
         
@@ -289,8 +289,22 @@
     Installation
   </a>
   
-    <nav class="md-nav" aria-label="Installation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-it" class="md-nav__link">
+    Create it
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#setup-the-database-and-minio" class="md-nav__link">
@@ -329,8 +343,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-send-a-test-sentence-to-the-api" class="md-nav__link">
-    Step 1: Send a test sentence to the API
+  <a href="#send-a-test-sentence-to-the-api" class="md-nav__link">
+    Send a test sentence to the API
   </a>
   
 </li>
@@ -433,8 +447,22 @@
     Installation
   </a>
   
-    <nav class="md-nav" aria-label="Installation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-it" class="md-nav__link">
+    Create it
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#setup-the-database-and-minio" class="md-nav__link">
@@ -473,8 +501,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-send-a-test-sentence-to-the-api" class="md-nav__link">
-    Step 1: Send a test sentence to the API
+  <a href="#send-a-test-sentence-to-the-api" class="md-nav__link">
+    Send a test sentence to the API
   </a>
   
 </li>
@@ -518,7 +546,7 @@
                   
 
 
-  <h1>aimbase</h1>
+  <h1>Aimbase</h1>
 
 <!-- adapted from FastAPI's index.md at https://github.com/tiangolo/fastapi -->
 <p align="center">
@@ -526,8 +554,8 @@
 </p>
 
 <hr />
-<p><strong>Documentation</strong>: <a href="https://aimbase.erob.io/" target="_blank">aimbase.erob.io</a></p>
-<p><strong>Source Code</strong>: <a href="https://github.com/erob123/aimbase" target="_blank">github.com/erob123/aimbase</a></p>
+<p><strong>Documentation</strong>: <a href="https://aimbase.erob.io/" class="external-link" target="_blank">aimbase.erob.io</a></p>
+<p><strong>Source Code</strong>: <a href="https://github.com/erob123/aimbase" class="external-link" target="_blank">github.com/erob123/aimbase</a></p>
 <hr />
 <p><code>Aimbase</code> offers an opinionated yet flexible abstraction, seamlessly integrating with large object storage to safeguard proprietary or data-controlled model weights. Leveraging the instantaneous database and API configuration capabilities provided by <code>Instarest</code>, <code>Aimbase</code> presents a declarative, extensible, and opinionated framework tailored for crafting REST APIs dedicated to AI Models. It streamlines development by eliminating redundant boilerplate and promoting code reusability, proving especially valuable when working with models associated with sensitive or proprietary data.</p>
 <p><strong><em>Our goal is to help you turn months of work into days and thousands of lines of code into less than a hundred.</em></strong></p>
@@ -539,7 +567,7 @@
 <li><strong>Fewer Unit Tests</strong>: your application will be built on a foundation that is designed to be correct, reducing the need for extensive unit testing. Complete code coverage can be achieved with a handful of unit tests.</li>
 <li><strong>Easy</strong>: Designed to be easy to use and learn. Less time reading docs.</li>
 <li><strong>Extensible</strong>: <code>Aimbase</code> is built to be modular, and as such is easy to extend so that you can have your own custom, realizable opinions and abstractions. Frameworks such as <strong>YourFramework</strong> and <strong>Chainbase</strong> are built on top of <code>Aimbase</code> in this way.</li>
-<li><strong>Standards-based</strong>: Based on FastAPI, which itself is based on (and fully compatible with) the open standards for APIs: <a href="https://github.com/OAI/OpenAPI-Specification" class="external-link" target="_blank">OpenAPI</a> (previously known as Swagger) and <a href="https://json-schema.org/" class="external-link" target="_blank">JSON Schema&lt;/a)</li>
+<li><strong>Standards-based</strong>: Based on FastAPI, which itself is based on (and fully compatible with) the open standards for APIs: <a href="https://github.com/OAI/OpenAPI-Specification" class="external-link" target="_blank">OpenAPI</a> (previously known as Swagger) and <a href="https://json-schema.org/" class="external-link" target="_blank">JSON Schema</a></li>
 </ul>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
@@ -549,85 +577,85 @@
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <div class="termy">
+
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>aimbase
 
 <span class="go">---&gt; 100%</span>
-<span class="go">&lt;/div&gt;</span>
+</code></pre></div>
 
-<span class="gp">#</span><span class="c1"># Example</span>
+</div>
 
-<span class="gp">#</span><span class="c1">## Create it</span>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<h3 id="create-it">Create it<a class="headerlink" href="#create-it" title="Permanent link">&para;</a></h3>
+<p>Let's create a comprehensive, database-backed, large-object storage-enabled, type-checked,
+versioned REST API tailored for handling proprietary or data-controlled models with <strong>Aimbase</strong> in just five minutes:</p>
+<ul>
+<li>Create a file <code>main.py</code> with:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aimbase.crud.base</span> <span class="kn">import</span> <span class="n">CRUDBaseAIModel</span>
+<span class="kn">from</span> <span class="nn">aimbase.db.base</span> <span class="kn">import</span> <span class="n">BaseAIModel</span><span class="p">,</span> <span class="n">FineTunedAIModel</span><span class="p">,</span> <span class="n">FineTunedAIModelWithBaseModel</span>
+<span class="kn">from</span> <span class="nn">aimbase.initializer</span> <span class="kn">import</span> <span class="n">AimbaseInitializer</span>
+<span class="kn">from</span> <span class="nn">aimbase.routers.sentence_transformer_router</span> <span class="kn">import</span> <span class="n">SentenceTransformersRouter</span>
+<span class="kn">from</span> <span class="nn">aimbase.dependencies</span> <span class="kn">import</span> <span class="n">get_minio</span>
+<span class="kn">from</span> <span class="nn">instarest</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AppBase</span><span class="p">,</span>
+    <span class="n">DeclarativeBase</span><span class="p">,</span>
+    <span class="n">SchemaBase</span><span class="p">,</span>
+    <span class="n">Initializer</span><span class="p">,</span>
+    <span class="n">get_db</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="go">Let&#39;s create a comprehensive, database-backed, large-object storage-enabled, type-checked,</span>
-<span class="go">versioned REST API tailored for handling proprietary or data-controlled models with **Aimbase** in just five minutes:</span>
+<span class="kn">from</span> <span class="nn">aimbase.services.sentence_transformer_inference</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SentenceTransformerInferenceService</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="go">* Create a file `main.py` with:</span>
+<span class="n">Initializer</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">AimbaseInitializer</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 
-<span class="go">```Python</span>
-<span class="go">from aimbase.crud.base import CRUDBaseAIModel</span>
-<span class="go">from aimbase.db.base import BaseAIModel, FineTunedAIModel, FineTunedAIModelWithBaseModel</span>
-<span class="go">from aimbase.initializer import AimbaseInitializer</span>
-<span class="go">from aimbase.routers.sentence_transformer_router import SentenceTransformersRouter</span>
-<span class="go">from aimbase.dependencies import get_minio</span>
-<span class="go">from instarest import (</span>
-<span class="go">    AppBase,</span>
-<span class="go">    DeclarativeBase,</span>
-<span class="go">    SchemaBase,</span>
-<span class="go">    Initializer,</span>
-<span class="go">    get_db,</span>
-<span class="go">)</span>
+<span class="c1"># built pydantic data transfer schemas automagically</span>
+<span class="n">crud_schemas</span> <span class="o">=</span> <span class="n">SchemaBase</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
 
-<span class="go">from aimbase.services.sentence_transformer_inference import (</span>
-<span class="go">    SentenceTransformerInferenceService,</span>
-<span class="go">)</span>
+<span class="c1"># build db service automagically</span>
+<span class="n">crud_test</span> <span class="o">=</span> <span class="n">CRUDBaseAIModel</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
 
-<span class="go">Initializer(DeclarativeBase).execute()</span>
-<span class="go">AimbaseInitializer().execute()</span>
+<span class="c1">## ************ DEV INITIALIZATION ONLY (if desired to simulate</span>
+<span class="c1">#  no internet connection...will auto init on first endpoint hit, but</span>
+<span class="c1">#  will not auto-upload to minio) ************ ##</span>
+<span class="n">SentenceTransformerInferenceService</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;all-MiniLM-L6-v2&quot;</span><span class="p">,</span>
+    <span class="n">db</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">get_db</span><span class="p">()),</span>
+    <span class="n">crud</span><span class="o">=</span><span class="n">crud_test</span><span class="p">,</span>
+    <span class="n">s3</span><span class="o">=</span><span class="n">get_minio</span><span class="p">(),</span>
+    <span class="n">prioritize_internet_download</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">dev_init</span><span class="p">()</span>
+<span class="c1">## ************ DEV INITIALIZATION ONLY ************ ##</span>
 
-<span class="gp"># </span>built<span class="w"> </span>pydantic<span class="w"> </span>data<span class="w"> </span>transfer<span class="w"> </span>schemas<span class="w"> </span>automagically
-<span class="go">crud_schemas = SchemaBase(BaseAIModel)</span>
+<span class="c1"># build ai router automagically</span>
+<span class="n">test_router</span> <span class="o">=</span> <span class="n">SentenceTransformersRouter</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;all-MiniLM-L6-v2&quot;</span><span class="p">,</span>
+    <span class="n">schema_base</span><span class="o">=</span><span class="n">crud_schemas</span><span class="p">,</span>
+    <span class="n">crud_base</span><span class="o">=</span><span class="n">crud_test</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/sentences&quot;</span><span class="p">,</span>
+    <span class="n">allow_delete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="gp"># </span>build<span class="w"> </span>db<span class="w"> </span>service<span class="w"> </span>automagically
-<span class="go">crud_test = CRUDBaseAIModel(BaseAIModel)</span>
+<span class="c1"># setup base up from routers</span>
+<span class="n">app_base</span> <span class="o">=</span> <span class="n">AppBase</span><span class="p">(</span>
+    <span class="n">crud_routers</span><span class="o">=</span><span class="p">[</span><span class="n">test_router</span><span class="p">],</span> <span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;Aimbase Inference Test App API&quot;</span>
+<span class="p">)</span>
 
-<span class="gp">#</span><span class="c1"># ************ DEV INITIALIZATION ONLY (if desired to simulate</span>
-<span class="gp">#  </span>no<span class="w"> </span>internet<span class="w"> </span>connection...will<span class="w"> </span>auto<span class="w"> </span>init<span class="w"> </span>on<span class="w"> </span>first<span class="w"> </span>endpoint<span class="w"> </span>hit,<span class="w"> </span>but
-<span class="gp">#  </span>will<span class="w"> </span>not<span class="w"> </span>auto-upload<span class="w"> </span>to<span class="w"> </span>minio<span class="o">)</span><span class="w"> </span>************<span class="w"> </span><span class="c1">##</span>
-<span class="go">SentenceTransformerInferenceService(</span>
-<span class="go">    model_name=&quot;all-MiniLM-L6-v2&quot;,</span>
-<span class="go">    db=next(get_db()),</span>
-<span class="go">    crud=crud_test,</span>
-<span class="go">    s3=get_minio(),</span>
-<span class="go">    prioritize_internet_download=False,</span>
-<span class="go">).dev_init()</span>
-<span class="gp">#</span><span class="c1"># ************ DEV INITIALIZATION ONLY ************ ##</span>
+<span class="c1"># automagic and version app</span>
+<span class="n">auto_app</span> <span class="o">=</span> <span class="n">app_base</span><span class="o">.</span><span class="n">get_autowired_app</span><span class="p">()</span>
 
-<span class="gp"># </span>build<span class="w"> </span>ai<span class="w"> </span>router<span class="w"> </span>automagically
-<span class="go">test_router = SentenceTransformersRouter(</span>
-<span class="go">    model_name=&quot;all-MiniLM-L6-v2&quot;,</span>
-<span class="go">    schema_base=crud_schemas,</span>
-<span class="go">    crud_base=crud_test,</span>
-<span class="go">    prefix=&quot;/sentences&quot;,</span>
-<span class="go">    allow_delete=True,</span>
-<span class="go">)</span>
-
-<span class="gp"># </span>setup<span class="w"> </span>base<span class="w"> </span>up<span class="w"> </span>from<span class="w"> </span>routers
-<span class="go">app_base = AppBase(</span>
-<span class="go">    crud_routers=[test_router], app_name=&quot;Aimbase Inference Test App API&quot;</span>
-<span class="go">)</span>
-
-<span class="gp"># </span>automagic<span class="w"> </span>and<span class="w"> </span>version<span class="w"> </span>app
-<span class="go">auto_app = app_base.get_autowired_app()</span>
-
-<span class="gp"># </span>core<span class="w"> </span>underlying<span class="w"> </span>app
-<span class="go">app = app_base.get_core_app()</span>
+<span class="c1"># core underlying app</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">app_base</span><span class="o">.</span><span class="n">get_core_app</span><span class="p">()</span>
 </code></pre></div>
 <h3 id="setup-the-database-and-minio">Setup the database and MinIO<a class="headerlink" href="#setup-the-database-and-minio" title="Permanent link">&para;</a></h3>
 <p>If you already have a PostgreSQL database and MinIO running, you can skip this step.</p>
 <p>If not, we will launch them via local containers:</p>
 <ol>
 <li>
-<p>First, make sure that you have docker installed and running. If you don't, <a href="https://docs.docker.com/get-docker/" target="_blank">you can install it by following the directions at this link</a>.</p>
+<p>First, make sure that you have docker installed and running. If you don't, <a href="https://docs.docker.com/get-docker/" class="external-link" target="_blank">you can install it by following the directions at this link</a>.</p>
 </li>
 <li>
 <p>Download the <code>aimbase</code> docker-compose file:</p>
@@ -691,7 +719,7 @@ production they will come from your password defined through your database provi
 <p>You will see the automatic interactive API documentation (provided by <a href="https://github.com/swagger-api/swagger-ui" class="external-link" target="_blank">Swagger UI</a>):</p>
 <p>Congratulations! You have just created your first fully-functional REST API with Aimbase, implementing AI-based sentence embeddings backed by a database in just a few lines.</p>
 <h3 id="check-it">Check it<a class="headerlink" href="#check-it" title="Permanent link">&para;</a></h3>
-<h4 id="step-1-send-a-test-sentence-to-the-api">Step 1: Send a test sentence to the API<a class="headerlink" href="#step-1-send-a-test-sentence-to-the-api" title="Permanent link">&para;</a></h4>
+<h4 id="send-a-test-sentence-to-the-api">Send a test sentence to the API<a class="headerlink" href="#send-a-test-sentence-to-the-api" title="Permanent link">&para;</a></h4>
 <p>In the interactive docs (or using <code>curl</code> if you prefer), go to the POST operation for <code>/sentences/encode</code> and try it. Send this JSON body:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;documents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;This is a test sentence.&quot;</span><span class="p">]</span>
