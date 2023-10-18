@@ -30,7 +30,16 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: docs-site
           path: ./site/
+      - name: Check if directory is empty
+        run: |
+          if [ -z "$(find ./site -mindepth 1 -print -quit)" ]; then
+            echo "::set-output name=directoryEmpty::true"
+          else
+            echo "::set-output name=directoryEmpty::false"
+          fi
+        id: check_directory
       - name: Deploy to GitHub Pages
+        if: steps.check_directory.outputs.directoryEmpty == 'false'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.DEPLOY_TOKEN }}
