@@ -33,9 +33,9 @@ jobs:
       - name: Check if directory is empty
         run: |
           if [ -z "$(find ./site -mindepth 1 -print -quit)" ]; then
-            echo "::set-output name=directoryEmpty::true"
+            echo "directoryEmpty=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=directoryEmpty::false"
+            echo "directoryEmpty=false" >> $GITHUB_OUTPUT
           fi
         id: check_directory
       - name: Deploy to GitHub Pages
