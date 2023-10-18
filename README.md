@@ -33,4 +33,4 @@ To contribute to `aimbase`, see the [contributing](#contributing) section below.
 1. Install docs dependencies with `pip install -r requirements-docs.txt`.
 1. Install `mkdocs` with `pip install mkdocs-material`.
 1. Move into the `docs/en` directory via `cd docs/en`.
-1. Run `mkdocs serve` to start a local server
+1. Run `mkdocs serve` to start a local server.
