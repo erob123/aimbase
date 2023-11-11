@@ -17,6 +17,27 @@ x-minio-common: &minio-common
     timeout: 20s
     retries: 3
 services:
+  db:
+    image: ankane/pgvector:v0.5.1
+    volumes:
+      - postgres-aimbase-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin-aimbase-data:/var/lib/pgadmin/
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@test.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
   # starts 4 docker containers running minio server instances.
   # using nginx reverse proxy, load balancing, you can access
   # it through port 9000.
@@ -59,6 +80,8 @@ services:
       - minio3
       - minio4
 volumes:
+    postgres-aimbase-data:
+    pgadmin-aimbase-data:
     data1-1:
     data1-2:
     data2-1:
