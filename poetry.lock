@@ -215,13 +215,13 @@ files = [
 
 [[package]]
 name = "fastapi"
-version = "0.100.1"
+version = "0.103.2"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "fastapi-0.100.1-py3-none-any.whl", hash = "sha256:ec6dd52bfc4eff3063cfcd0713b43c87640fefb2687bbbe3d8a08d94049cdf32"},
-    {file = "fastapi-0.100.1.tar.gz", hash = "sha256:522700d7a469e4a973d92321ab93312448fbe20fca9c8da97effc7e7bc56df23"},
+    {file = "fastapi-0.103.2-py3-none-any.whl", hash = "sha256:3270de872f0fe9ec809d4bd3d4d890c6d5cc7b9611d721d6438f9dacc8c4ef2e"},
+    {file = "fastapi-0.103.2.tar.gz", hash = "sha256:75a11f6bfb8fc4d2bec0bd710c2d5f2829659c0e8c0afd5560fdda6ce25ec653"},
 ]
 
 [package.dependencies]
@@ -415,13 +415,13 @@ files = [
 
 [[package]]
 name = "instarest"
-version = "0.0.10"
+version = "0.0.7"
 description = "Declarative, instant REST APIs based on FastAPI, Pydantic, SQLAlchemy, and PostgreSQL"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "instarest-0.0.10-py3-none-any.whl", hash = "sha256:f5cf1c7f042b1995ccad810633d9661fc1736b28e3083cb5d031f3e16c6426a3"},
-    {file = "instarest-0.0.10.tar.gz", hash = "sha256:25930074c6cb85cb0f20ea9fa20601949da651f823b4ffcc6fbf1a4b600617b4"},
+    {file = "instarest-0.0.7-py3-none-any.whl", hash = "sha256:707ebe19e5da500dfc09dc528af20862e6891793791462b5dc8aaad5fdc7eac8"},
+    {file = "instarest-0.0.7.tar.gz", hash = "sha256:cf777418e4cadb7423e6b2026baf12219ca32edf0ab05553843d19312281ff1d"},
 ]
 
 [package.dependencies]
@@ -1040,4 +1040,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "2d9ed18b6825aa0e8aa02eee89a5e814408efab172cc295ccc7a559b068d5046"
+content-hash = "11bcc81cc44feca5ce1573c59caa08997cc23da209fb5969fc87391cd8ee23df"
