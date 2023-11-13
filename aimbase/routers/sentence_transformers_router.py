@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel
-from aimbase.services.sentence_transformer_inference import (
-    SentenceTransformerInferenceService,
+from aimbase.aimbase.services.sentence_transformers_inference import (
+    SentenceTransformersInferenceService,
 )
 from aimbase.dependencies import get_minio
 from instarest import RESTRouter
@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from minio import Minio
 
 
+# TODO: (1) add endpoint to create multi new documents with calculation, and (2) add endpoint for kNN search from query
 class SentenceTransformersRouter(RESTRouter):
     """
     FastAPI Router object wrapper for Sentence Transformers model.
@@ -66,7 +67,7 @@ class SentenceTransformersRouter(RESTRouter):
     def _build_sentence_transformer_inference_service(
         self, db: Session, s3: Minio | None = None
     ):
-        service = SentenceTransformerInferenceService(
+        service = SentenceTransformersInferenceService(
             model_name=self.model_name,
             db=db,
             crud=self.crud_base,

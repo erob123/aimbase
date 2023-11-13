@@ -6,7 +6,7 @@ from aimbase.services.base import BaseAIInferenceService
 
 
 # TODO: pull tracebacks out of all except blocks and handle at app level
-class SentenceTransformerInferenceService(BaseAIInferenceService):
+class SentenceTransformersInferenceService(BaseAIInferenceService):
     # internal only
     sentence_transformer_class: Any | None = None
 

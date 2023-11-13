@@ -15,7 +15,9 @@ os.environ["SECRETS"] = "False"
 from aimbase.crud.base import CRUDBaseAIModel
 from aimbase.db.base import BaseAIModel, FineTunedAIModel, FineTunedAIModelWithBaseModel
 from aimbase.initializer import AimbaseInitializer
-from aimbase.routers.sentence_transformer_router import SentenceTransformersRouter
+from aimbase.aimbase.routers.sentence_transformers_router import (
+    SentenceTransformersRouter,
+)
 from aimbase.dependencies import get_minio
 from instarest import (
     AppBase,
@@ -25,8 +27,8 @@ from instarest import (
     get_db,
 )
 
-from aimbase.services.sentence_transformer_inference import (
-    SentenceTransformerInferenceService,
+from aimbase.aimbase.services.sentence_transformers_inference import (
+    SentenceTransformersInferenceService,
 )
 
 # TODO: import to __init__.py for aimbase and update imports here
@@ -42,7 +44,7 @@ crud_test = CRUDBaseAIModel(BaseAIModel)
 ## ************ DEV INITIALIZATION ONLY (if desired to simulate
 #  no internet connection...will auto init on first endpoint hit, but
 #  will not auto-upload to minio) ************ ##
-SentenceTransformerInferenceService(
+SentenceTransformersInferenceService(
     model_name="all-MiniLM-L6-v2",
     db=next(get_db()),
     crud=crud_test,

@@ -1,7 +1,7 @@
-from .sentence_transformer_inference import SentenceTransformerInferenceService
+from .sentence_transformers_inference import SentenceTransformersInferenceService
 
 
-class CrossEncoderInferenceService(SentenceTransformerInferenceService):
+class CrossEncoderInferenceService(SentenceTransformersInferenceService):
     def import_dynamic_dependencies(self):
         """
         Overrides default to import CrossEncoder

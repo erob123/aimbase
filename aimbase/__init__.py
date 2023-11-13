@@ -1,5 +1,5 @@
-from aimbase.services.sentence_transformer_inference import (
-    SentenceTransformerInferenceService,
+from aimbase.aimbase.services.sentence_transformers_inference import (
+    SentenceTransformersInferenceService,
 )
 from aimbase.services.cross_encoder_inference import CrossEncoderInferenceService
 from aimbase.services.base import BaseAIInferenceService

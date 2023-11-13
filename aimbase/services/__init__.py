@@ -1,3 +1,3 @@
-from .sentence_transformer_inference import SentenceTransformerInferenceService
+from .sentence_transformers_inference import SentenceTransformersInferenceService
 from .cross_encoder_inference import CrossEncoderInferenceService
 from .base import BaseAIInferenceService
