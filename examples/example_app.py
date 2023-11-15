@@ -13,12 +13,16 @@ os.environ["SECRETS"] = "False"
 ## ************ ENV VAR INIT BEFORE IMPORTS ************ ##
 
 from aimbase.crud.base import CRUDBaseAIModel
-from aimbase.db.base import BaseAIModel, FineTunedAIModel, FineTunedAIModelWithBaseModel
+from aimbase.db.base import BaseAIModel
 from aimbase.initializer import AimbaseInitializer
-from aimbase.aimbase.routers.sentence_transformers_router import (
+from aimbase.routers.sentence_transformers_router import (
     SentenceTransformersRouter,
 )
 from aimbase.dependencies import get_minio
+from aimbase.crud.sentence_transformers_document import (
+    CRUDSentenceTransformersDocumentModel,
+)
+from aimbase.db.vector import AllMiniDocumentModel
 from instarest import (
     AppBase,
     DeclarativeBase,
@@ -27,7 +31,7 @@ from instarest import (
     get_db,
 )
 
-from aimbase.aimbase.services.sentence_transformers_inference import (
+from aimbase.services.sentence_transformers_inference import (
     SentenceTransformersInferenceService,
 )
 
@@ -36,10 +40,12 @@ Initializer(DeclarativeBase).execute()
 AimbaseInitializer().execute()
 
 # built pydantic data transfer schemas automagically
-crud_schemas = SchemaBase(BaseAIModel)
+crud_ai_schemas = SchemaBase(BaseAIModel)
+crud_vector_schemas = SchemaBase(AllMiniDocumentModel)
 
-# build db service automagically
-crud_test = CRUDBaseAIModel(BaseAIModel)
+# build db services automagically
+crud_ai_test = CRUDBaseAIModel(BaseAIModel)
+crud_vector_test = CRUDSentenceTransformersDocumentModel(AllMiniDocumentModel)
 
 ## ************ DEV INITIALIZATION ONLY (if desired to simulate
 #  no internet connection...will auto init on first endpoint hit, but
@@ -47,7 +53,7 @@ crud_test = CRUDBaseAIModel(BaseAIModel)
 SentenceTransformersInferenceService(
     model_name="all-MiniLM-L6-v2",
     db=next(get_db()),
-    crud=crud_test,
+    crud=crud_ai_test,
     s3=get_minio(),
     prioritize_internet_download=False,
 ).dev_init()
@@ -56,8 +62,9 @@ SentenceTransformersInferenceService(
 # build ai router automagically
 test_router = SentenceTransformersRouter(
     model_name="all-MiniLM-L6-v2",
-    schema_base=crud_schemas,
-    crud_base=crud_test,
+    schema_base=crud_vector_schemas,
+    crud_ai_base=crud_ai_test,
+    crud_base=crud_vector_test,
     prefix="/sentences",
     allow_delete=True,
 )
