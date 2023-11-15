@@ -19,10 +19,10 @@ from aimbase.routers.sentence_transformers_router import (
     SentenceTransformersRouter,
 )
 from aimbase.dependencies import get_minio
-from aimbase.crud.sentence_transformers_vector import (
-    CRUDSentenceTransformersVectorStore,
+from aimbase.crud.sentence_transformers_document import (
+    CRUDSentenceTransformersDocumentModel,
 )
-from aimbase.db.vector import AllMiniVectorStore, SourceModel
+from aimbase.db.vector import AllMiniDocumentModel
 from instarest import (
     AppBase,
     DeclarativeBase,
@@ -42,12 +42,12 @@ Initializer(DeclarativeBase).execute(vector_toggle=True)
 AimbaseInitializer().execute()
 
 # built pydantic data transfer schemas automagically
-base_ai_schemas = SchemaBase(BaseAIModel)
-vector_embedding_schemas = SchemaBase(AllMiniVectorStore)
+crud_ai_schemas = SchemaBase(BaseAIModel)
+crud_vector_schemas = SchemaBase(AllMiniDocumentModel)
 
 # build db services automagically
 crud_ai_test = CRUDBaseAIModel(BaseAIModel)
-crud_vector_test = CRUDSentenceTransformersVectorStore(AllMiniVectorStore)
+crud_vector_test = CRUDSentenceTransformersDocumentModel(AllMiniDocumentModel)
 
 ## ************ DEV INITIALIZATION ONLY (if desired to simulate
 #  no internet connection...will auto init on first endpoint hit, but
@@ -64,7 +64,7 @@ SentenceTransformersInferenceService(
 # build ai router automagically
 document_vector_store_router = SentenceTransformersRouter(
     model_name="all-MiniLM-L6-v2",
-    schema_base=vector_embedding_schemas,
+    schema_base=crud_vector_schemas,
     crud_ai_base=crud_ai_test,
     crud_base=crud_vector_test,
     prefix="/sentences",
