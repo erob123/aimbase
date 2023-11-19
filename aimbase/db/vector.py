@@ -37,6 +37,7 @@ class DocumentModel(DeclarativeBase):
 
 # Document store for https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 class AllMiniDocumentModel(DocumentModel):
+    id = Column(UUID, ForeignKey("documentmodel.id"), primary_key=True)
     embedding = Column(Vector(384))
 
     __mapper_args__ = {

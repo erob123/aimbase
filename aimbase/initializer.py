@@ -13,6 +13,10 @@ class AimbaseInitializer:
             LOGGER_NAME=self.__class__.__name__
         ).build_logger()
 
+    def init_vector_db(self, db) -> None:
+        # session.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))``````````````````````````````````````````
+        pass
+
     def init_minio_bucket(self, s3: Minio) -> None:
         bucket_name = get_aimbase_settings().minio_bucket_name
         try:

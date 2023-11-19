@@ -1,7 +1,5 @@
 version: '3.8'
 # Settings and configurations that are common for all minio containers
-include:
-  - https://raw.githubusercontent.com/erob123/instarest/main/docker-compose.yml
 x-minio-common: &minio-common
   image: quay.io/minio/minio:RELEASE.2023-04-20T17-56-55Z
   command: server --console-address ":9001" http://minio{1...4}/data{1...2}

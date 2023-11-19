@@ -7,7 +7,7 @@ from ..services.sentence_transformers_inference import (
     SentenceTransformersInferenceService,
 )
 from ..db.vector import DocumentModel, SourceModel
-from .vector_document import CRUDVectorDocumentModel
+from .vector import CRUDVectorDocumentModel
 
 
 VectorDocumentModelType = TypeVar("VectorDocumentModelType", bound=DocumentModel)
