@@ -124,30 +124,31 @@ class CRUDVectorStore(CRUDBase[VectorStoreType, CreateSchemaType, UpdateSchemaTy
         downloaded_datetime_start: datetime | None = None,
         downloaded_datetime_end: datetime | None = None,
     ) -> Query:
-        # avoid joins if possible
-        if not titles and not downloaded_datetime_start and not downloaded_datetime_end:
-            return db_query
-
-        # join to get access to source metadata
-        db_query = db_query.join(
-            DocumentModel, DocumentModel.id == self.model.document_id
-        ).join(SourceModel, SourceModel.id == DocumentModel.source_id)
-
-        if titles:
-            title_filters = [
-                func.lower(SourceModel.title).contains(title.lower())
-                for title in titles
-            ]
-            db_query = db_query.filter(or_(*title_filters))
-
-        if downloaded_datetime_start:
-            db_query = db_query.filter(
-                SourceModel.downloaded_datetime >= downloaded_datetime_start
-            )
-
-        if downloaded_datetime_end:
-            db_query = db_query.filter(
-                SourceModel.downloaded_datetime <= downloaded_datetime_end
-            )
-
         return db_query
+
+        # # avoid joins if possible
+        # if not titles and not downloaded_datetime_start and not downloaded_datetime_end:
+        #     return db_query
+
+        # # join to get access to source metadata
+        # db_query = db_query.join(
+        #     DocumentModel, DocumentModel.id == self.model.document_id
+        # ).join(SourceModel, SourceModel.id == DocumentModel.source_id)
+
+        # if titles:
+        #     title_filters = [
+        #         func.lower(SourceModel.title) == title.lower() for title in titles
+        #     ]
+        #     db_query = db_query.filter(or_(*title_filters))
+
+        # if downloaded_datetime_start:
+        #     db_query = db_query.filter(
+        #         SourceModel.downloaded_datetime >= downloaded_datetime_start
+        #     )
+
+        # if downloaded_datetime_end:
+        #     db_query = db_query.filter(
+        #         SourceModel.downloaded_datetime <= downloaded_datetime_end
+        #     )
+
+        # return db_query

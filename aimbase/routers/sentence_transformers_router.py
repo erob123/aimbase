@@ -1,15 +1,20 @@
 from datetime import datetime
 from fastapi import Depends, HTTPException
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, StrictFloat
-from ..crud.sentence_transformers_document import CRUDSentenceTransformersDocumentModel
-from ..db.base import BaseAIModel, FineTunedAIModel
+from ..crud.base import (
+    CRUDBaseAIModel,
+    CRUDFineTunedAIModel,
+    CRUDFineTunedAIModelWithBaseModel,
+)
+from ..crud.sentence_transformers_vector import CRUDSentenceTransformersVectorStore
 from ..services.cross_encoder_inference import CrossEncoderInferenceService
 from ..services.sentence_transformers_inference import (
     SentenceTransformersInferenceService,
 )
+from ..db.vector import DocumentModel
 from ..dependencies import get_minio
-from instarest import RESTRouter
-from instarest import get_db
+from instarest import RESTRouter, SchemaBase, get_db
 from sqlalchemy.orm import Session
 from minio import Minio
 from typing import Any
@@ -29,8 +34,14 @@ class SentenceTransformersRouter(RESTRouter):
 
     model_name: str
     cross_encoder_name: str = "cross-encoder/ms-marco-TinyBERT-L-6"
-    crud_base: CRUDSentenceTransformersDocumentModel
-    crud_ai_base: BaseAIModel | FineTunedAIModel
+    crud_base: CRUDSentenceTransformersVectorStore
+    crud_ai_base: CRUDBaseAIModel | CRUDFineTunedAIModel | CRUDFineTunedAIModelWithBaseModel
+
+    ## internal only
+    # we are ok with source and source_id being optional for documents
+    _document_schemas: SchemaBase = SchemaBase(
+        DocumentModel, optional_fields=["source", "source_id"]
+    )  # :meta private:
 
     # override and do not call super() to prevent default CRUD endpoints
     def _add_endpoints(self):
@@ -69,35 +80,44 @@ class SentenceTransformersRouter(RESTRouter):
 
     def _define_create_documents(self):
         # CREATE MULTIPLE DOCUMENTS WITH EMBEDDING CALCULATION
+
         @self.router.post(
             "/create_and_embed_multi",
-            response_model=list[self.schema_base.Entity],
+            response_model=Any,
             responses=self.responses,
             summary=f"Create multiple new documents with calculation",
             response_description=f"List of created documents with calculated embeddings",
         )
         async def create_and_embed_multi(
-            documents: list[self.schema_base.EntityCreate],
+            documents: list[self._document_schemas.EntityCreate],
             db: Session = Depends(get_db),
             s3: Minio | None = Depends(get_minio),
-        ) -> list[self.schema_base.Entity]:
+        ) -> Any:
             try:
                 service = self._build_sentence_transformer_inference_service(db, s3)
             except Exception as e:
                 raise self._build_model_not_initialized_error()
 
             # Create and calculate embeddings for multiple documents
-            created_documents: list[
+            created_embeddings_db: list[
                 self.schema_base.get_model_type()
             ] = self.crud_base.create_and_calculate_multi(
-                db, obj_in_list=documents, embedding_service=service
+                db, docs_in_list=documents, embedding_service=service
             )
 
-            return created_documents
+            # need to convert to pydantic schema
+            # use from_orm to convert sqlalchemy object to pydantic schema rather than jsonable_encoder
+            # so that we can access validators to convert numpy types to standard python types
+            output_embeddings = [
+                self.schema_base.Entity.from_orm(created_embeddings_db[i])
+                for i in range(len(created_embeddings_db))
+            ]
+
+            return output_embeddings
 
     def _define_knn_search(self):
         class RankedNeighbor(BaseModel):
-            document: self.schema_base.Entity
+            document: self._document_schemas.Entity
             score: StrictFloat
 
         # kNN SEARCH
@@ -111,13 +131,13 @@ class SentenceTransformersRouter(RESTRouter):
         async def knn_search(
             query: str,
             k: int = 100,  # number of nearest neighbors to return
-            title: str | None = None,
+            titles: list[str] | None = None,
             downloaded_datetime_start: datetime | None = None,
             downloaded_datetime_end: datetime | None = None,
             similarity_measure: str = "cosine_distance",
             db: Session = Depends(get_db),
             s3: Minio | None = Depends(get_minio),
-        ) -> list[self.schema_base.Entity]:
+        ) -> list[RankedNeighbor]:
             try:
                 embedding_service = self._build_sentence_transformer_inference_service(
                     db, s3
@@ -132,10 +152,10 @@ class SentenceTransformersRouter(RESTRouter):
             query_embedding = embedding_service.model.encode(query)
 
             # Perform kNN search
-            retrieved_documents = (
+            retrieved_embeddings_db = (
                 self.crud_base.get_by_source_metadata_and_nearest_neighbors(
                     db,
-                    title=title,
+                    titles=titles,
                     downloaded_datetime_start=downloaded_datetime_start,
                     downloaded_datetime_end=downloaded_datetime_end,
                     vector_query=query_embedding,
@@ -144,16 +164,25 @@ class SentenceTransformersRouter(RESTRouter):
                 )
             )
 
+            # Step 1: If no documents are retrieved, return empty list
+            if len(retrieved_embeddings_db) == 0:
+                return []
+
             # Step 2: Score the documents via cross encoder
             cross_encoder_inputs = [
-                [query, doc.page_content] for doc in retrieved_documents
+                [query, emb.document.page_content] for emb in retrieved_embeddings_db
             ]
-            scores = cross_encoder_service.model.predict(cross_encoder_inputs)
+
+            scores = cross_encoder_service.model.predict(
+                cross_encoder_inputs
+            ).tolist()  # need to convert numpy objs to list to be json serializable
 
             # Step 3: Sort the scores in decreasing order
             unsorted_neighbors = []
-            for doc, score in zip(retrieved_documents, scores):
-                unsorted_neighbors.append(RankedNeighbor(document=doc, score=score))
+            for emb, score in zip(retrieved_embeddings_db, scores):
+                unsorted_neighbors.append(
+                    RankedNeighbor(document=emb.document, score=score)
+                )
 
             reranked_neighbors = sorted(
                 unsorted_neighbors, key=lambda item: item.score, reverse=True

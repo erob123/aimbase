@@ -34,61 +34,16 @@ class SourceModel(DeclarativeBase):
 
 class DocumentModel(DeclarativeBase):
     page_content = Column(String())
-    source_id = Column(UUID, ForeignKey("sourcemodel.id"))
+    source_id = Column(UUID, ForeignKey("sourcemodel.id"), nullable=True)
     source = relationship("SourceModel")
-    type = Column(String(), nullable=False)
-
-    __mapper_args__ = {
-        "polymorphic_identity": "DocumentModel",
-        "polymorphic_on": "type",
-    }
 
 
-class AllMiniDocumentModel(DocumentModel):
+##########Vector Stores by Model (Separate tables since different models have different dimensions)##########
+###Ensure that you define an "embedding" column if using with CRUDVectorStore####
+
+
+# Document store for https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+class AllMiniVectorStore(DeclarativeBase):
     embedding = Column(Vector(384))
-
-    __mapper_args__ = {
-        "polymorphic_identity": "AllMiniDocumentModel",
-    }
-
-
-class SourceModel(DeclarativeBase):
-    model_name = Column(String(), unique=True)
-    local_cache_path = Column(String())
-    sha256 = Column(String(64))
-    uploaded_minio = Column(Boolean(), default=False)
-
-
-class FineTunedAIModel(DeclarativeBase):
-    # model name does not need to be unique because we can have multiple fine tuned models of the same base model
-    model_name = Column(String())
-    local_cache_path = Column(String())
-    sha256 = Column(String(64))
-    uploaded_minio = Column(Boolean(), default=False)
-    version_sequence = Sequence(
-        __qualname__.lower() + "_version_sequence"
-    )  # see here for autoincrementing versioning: https://copyprogramming.com/howto/using-sqlalchemy-orm-for-a-non-primary-key-unique-auto-incrementing-id
-    version = Column(
-        Integer,
-        version_sequence,
-        server_default=version_sequence.next_value(),
-        index=True,
-        unique=True,
-        nullable=False,
-    )
-    type = Column(String(100), nullable=False)
-
-    __mapper_args__ = {
-        "polymorphic_identity": "FineTunedAIModel",
-        "polymorphic_on": "type",
-    }
-
-
-class FineTunedAIModelWithBaseModel(FineTunedAIModel):
-    id = Column(UUID, ForeignKey("finetunedaimodel.id"), primary_key=True)
-    base_ai_model_id = Column(UUID, ForeignKey("baseaimodel.id"))
-    base_ai_model = relationship("BaseAIModel")
-
-    __mapper_args__ = {
-        "polymorphic_identity": "FineTunedAIModelWithBaseModel",
-    }
+    document_id = Column(UUID, ForeignKey("documentmodel.id"))
+    document = relationship("DocumentModel")
