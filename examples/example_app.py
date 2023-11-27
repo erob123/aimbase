@@ -22,13 +22,15 @@ from aimbase.dependencies import get_minio
 from aimbase.crud.sentence_transformers_vector import (
     CRUDSentenceTransformersVectorStore,
 )
-from aimbase.db.vector import AllMiniVectorStore
+from aimbase.db.vector import AllMiniVectorStore, SourceModel
 from instarest import (
     AppBase,
     DeclarativeBase,
     SchemaBase,
     Initializer,
     get_db,
+    RESTRouter,
+    CRUDBase,
 )
 
 from aimbase.services.sentence_transformers_inference import (
@@ -40,8 +42,8 @@ Initializer(DeclarativeBase).execute()
 AimbaseInitializer().execute()
 
 # built pydantic data transfer schemas automagically
-crud_ai_schemas = SchemaBase(BaseAIModel)
-crud_vector_schemas = SchemaBase(AllMiniVectorStore)
+base_ai_schemas = SchemaBase(BaseAIModel)
+vector_embedding_schemas = SchemaBase(AllMiniVectorStore)
 
 # build db services automagically
 crud_ai_test = CRUDBaseAIModel(BaseAIModel)
@@ -60,18 +62,40 @@ SentenceTransformersInferenceService(
 ## ************ DEV INITIALIZATION ONLY ************ ##
 
 # build ai router automagically
-test_router = SentenceTransformersRouter(
+document_vector_store_router = SentenceTransformersRouter(
     model_name="all-MiniLM-L6-v2",
-    schema_base=crud_vector_schemas,
+    schema_base=vector_embedding_schemas,
     crud_ai_base=crud_ai_test,
     crud_base=crud_vector_test,
     prefix="/sentences",
     allow_delete=True,
 )
 
+# built pydantic data transfer schemas & crud db services automagically
+source_model_schemas = SchemaBase(
+    SourceModel,
+    optional_fields=[
+        "description",
+        "downloaded_datetime",
+        "private_url",
+        "public_url",
+        "embedding",
+    ],
+)
+crud_source_model = CRUDBase(SourceModel)
+
+# build sources router automagically
+sources_router = RESTRouter(
+    schema_base=source_model_schemas,
+    crud_base=crud_source_model,
+    prefix="/sources",
+    allow_delete=False,
+)
+
 # setup base up from routers
 app_base = AppBase(
-    crud_routers=[test_router], app_name="Aimbase Inference Test App API"
+    crud_routers=[document_vector_store_router, sources_router],
+    app_name="Aimbase Inference Test App API",
 )
 
 # automagic and version app

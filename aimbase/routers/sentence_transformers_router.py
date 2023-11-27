@@ -82,7 +82,7 @@ class SentenceTransformersRouter(RESTRouter):
         # CREATE MULTIPLE DOCUMENTS WITH EMBEDDING CALCULATION
 
         @self.router.post(
-            "/create_and_embed_multi",
+            "/create-and-embed",
             response_model=Any,
             responses=self.responses,
             summary=f"Create multiple new documents with calculation",
@@ -116,25 +116,28 @@ class SentenceTransformersRouter(RESTRouter):
             return output_embeddings
 
     def _define_knn_search(self):
+        class KnnInput(BaseModel):
+            query: str
+            k: int = 100  # number of nearest neighbors to return
+            titles: list[str] | None = None
+            downloaded_datetime_start: datetime | None = None
+            downloaded_datetime_end: datetime | None = None
+            similarity_measure: str = "cosine_distance"
+
         class RankedNeighbor(BaseModel):
             document: self._document_schemas.Entity
             score: StrictFloat
 
         # kNN SEARCH
         @self.router.post(
-            "/knn_search",
+            "/knn-search",
             response_model=list[RankedNeighbor],
             responses=self.responses,
             summary=f"kNN search for similar documents",
             response_description=f"List of documents similar to the query",
         )
         async def knn_search(
-            query: str,
-            k: int = 100,  # number of nearest neighbors to return
-            titles: list[str] | None = None,
-            downloaded_datetime_start: datetime | None = None,
-            downloaded_datetime_end: datetime | None = None,
-            similarity_measure: str = "cosine_distance",
+            request: KnnInput,
             db: Session = Depends(get_db),
             s3: Minio | None = Depends(get_minio),
         ) -> list[RankedNeighbor]:
@@ -149,18 +152,18 @@ class SentenceTransformersRouter(RESTRouter):
                 raise self._build_model_not_initialized_error()
 
             # Calculate embedding for the query
-            query_embedding = embedding_service.model.encode(query)
+            query_embedding = embedding_service.model.encode(request.query)
 
             # Perform kNN search
             retrieved_embeddings_db = (
                 self.crud_base.get_by_source_metadata_and_nearest_neighbors(
                     db,
-                    titles=titles,
-                    downloaded_datetime_start=downloaded_datetime_start,
-                    downloaded_datetime_end=downloaded_datetime_end,
+                    titles=request.titles,
+                    downloaded_datetime_start=request.downloaded_datetime_start,
+                    downloaded_datetime_end=request.downloaded_datetime_end,
                     vector_query=query_embedding,
-                    k=k,
-                    similarity_measure=similarity_measure,
+                    k=request.k,
+                    similarity_measure=request.similarity_measure,
                 )
             )
 
@@ -170,7 +173,8 @@ class SentenceTransformersRouter(RESTRouter):
 
             # Step 2: Score the documents via cross encoder
             cross_encoder_inputs = [
-                [query, emb.document.page_content] for emb in retrieved_embeddings_db
+                [request.query, emb.document.page_content]
+                for emb in retrieved_embeddings_db
             ]
 
             scores = cross_encoder_service.model.predict(
