@@ -22,7 +22,7 @@ from aimbase.dependencies import get_minio
 from aimbase.crud.sentence_transformers_vector import (
     CRUDSentenceTransformersVectorStore,
 )
-from aimbase.db.vector import AllMiniVectorStore
+from aimbase.db.vector import AllMiniVectorStore, SourceModel
 from instarest import (
     AppBase,
     DeclarativeBase,
@@ -42,8 +42,8 @@ Initializer(DeclarativeBase).execute(vector_toggle=True)
 AimbaseInitializer().execute()
 
 # built pydantic data transfer schemas automagically
-crud_ai_schemas = SchemaBase(BaseAIModel)
-crud_vector_schemas = SchemaBase(AllMiniVectorStore)
+base_ai_schemas = SchemaBase(BaseAIModel)
+vector_embedding_schemas = SchemaBase(AllMiniVectorStore)
 
 # build db services automagically
 crud_ai_test = CRUDBaseAIModel(BaseAIModel)
@@ -64,7 +64,7 @@ SentenceTransformersInferenceService(
 # build ai router automagically
 document_vector_store_router = SentenceTransformersRouter(
     model_name="all-MiniLM-L6-v2",
-    schema_base=crud_vector_schemas,
+    schema_base=vector_embedding_schemas,
     crud_ai_base=crud_ai_test,
     crud_base=crud_vector_test,
     prefix="/sentences",
