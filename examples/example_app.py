@@ -38,7 +38,7 @@ from aimbase.services.sentence_transformers_inference import (
 )
 
 # TODO: import to __init__.py for aimbase and update imports here
-Initializer(DeclarativeBase).execute()
+Initializer(DeclarativeBase).execute(vector_toggle=True)
 AimbaseInitializer().execute()
 
 # built pydantic data transfer schemas automagically
