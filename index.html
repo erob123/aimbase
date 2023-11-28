@@ -592,56 +592,104 @@ versioned REST API tailored for handling proprietary or data-controlled models w
 <ul>
 <li>Create a file <code>main.py</code> with:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aimbase.crud.base</span> <span class="kn">import</span> <span class="n">CRUDBaseAIModel</span>
-<span class="kn">from</span> <span class="nn">aimbase.db.base</span> <span class="kn">import</span> <span class="n">BaseAIModel</span><span class="p">,</span> <span class="n">FineTunedAIModel</span><span class="p">,</span> <span class="n">FineTunedAIModelWithBaseModel</span>
+<div class="highlight"><pre><span></span><code><span class="c1">## ************ ENV VAR INIT BEFORE IMPORTS ************ ##</span>
+<span class="c1"># Make sure to set ENVIRONMENT, ENV_VAR_FOLDER, and SECRETS in your environment,</span>
+<span class="c1"># outside of any .env file.  This is to ensure that the correct environment</span>
+<span class="c1"># variables are loaded before the app is initialized.</span>
+<span class="c1"># Default values are: ENVIRONMENT=local, ENV_VAR_FOLDER=./env_vars, SECRETS=False if not set here</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ENVIRONMENT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ENV_VAR_FOLDER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s2">&quot;env_vars&quot;</span>
+<span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SECRETS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;False&quot;</span>
+<span class="c1">## ************ ENV VAR INIT BEFORE IMPORTS ************ ##</span>
+
+<span class="kn">from</span> <span class="nn">aimbase.crud.base</span> <span class="kn">import</span> <span class="n">CRUDBaseAIModel</span>
+<span class="kn">from</span> <span class="nn">aimbase.db.base</span> <span class="kn">import</span> <span class="n">BaseAIModel</span>
 <span class="kn">from</span> <span class="nn">aimbase.initializer</span> <span class="kn">import</span> <span class="n">AimbaseInitializer</span>
-<span class="kn">from</span> <span class="nn">aimbase.routers.sentence_transformer_router</span> <span class="kn">import</span> <span class="n">SentenceTransformersRouter</span>
+<span class="kn">from</span> <span class="nn">aimbase.routers.sentence_transformers_router</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SentenceTransformersRouter</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">aimbase.dependencies</span> <span class="kn">import</span> <span class="n">get_minio</span>
+<span class="kn">from</span> <span class="nn">aimbase.crud.sentence_transformers_vector</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CRUDSentenceTransformersVectorStore</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">aimbase.db.vector</span> <span class="kn">import</span> <span class="n">AllMiniVectorStore</span><span class="p">,</span> <span class="n">SourceModel</span>
 <span class="kn">from</span> <span class="nn">instarest</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AppBase</span><span class="p">,</span>
     <span class="n">DeclarativeBase</span><span class="p">,</span>
     <span class="n">SchemaBase</span><span class="p">,</span>
     <span class="n">Initializer</span><span class="p">,</span>
     <span class="n">get_db</span><span class="p">,</span>
+    <span class="n">RESTRouter</span><span class="p">,</span>
+    <span class="n">CRUDBase</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">aimbase.services.sentence_transformer_inference</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">SentenceTransformerInferenceService</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">aimbase.services.sentence_transformers_inference</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SentenceTransformersInferenceService</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">Initializer</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="c1"># TODO: import to __init__.py for aimbase and update imports here</span>
+<span class="n">Initializer</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">vector_toggle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">AimbaseInitializer</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 
 <span class="c1"># built pydantic data transfer schemas automagically</span>
-<span class="n">crud_schemas</span> <span class="o">=</span> <span class="n">SchemaBase</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
+<span class="n">base_ai_schemas</span> <span class="o">=</span> <span class="n">SchemaBase</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
+<span class="n">vector_embedding_schemas</span> <span class="o">=</span> <span class="n">SchemaBase</span><span class="p">(</span><span class="n">AllMiniVectorStore</span><span class="p">)</span>
 
-<span class="c1"># build db service automagically</span>
-<span class="n">crud_test</span> <span class="o">=</span> <span class="n">CRUDBaseAIModel</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
+<span class="c1"># build db services automagically</span>
+<span class="n">crud_ai_test</span> <span class="o">=</span> <span class="n">CRUDBaseAIModel</span><span class="p">(</span><span class="n">BaseAIModel</span><span class="p">)</span>
+<span class="n">crud_vector_test</span> <span class="o">=</span> <span class="n">CRUDSentenceTransformersVectorStore</span><span class="p">(</span><span class="n">AllMiniVectorStore</span><span class="p">)</span>
 
 <span class="c1">## ************ DEV INITIALIZATION ONLY (if desired to simulate</span>
 <span class="c1">#  no internet connection...will auto init on first endpoint hit, but</span>
 <span class="c1">#  will not auto-upload to minio) ************ ##</span>
-<span class="n">SentenceTransformerInferenceService</span><span class="p">(</span>
+<span class="n">SentenceTransformersInferenceService</span><span class="p">(</span>
     <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;all-MiniLM-L6-v2&quot;</span><span class="p">,</span>
     <span class="n">db</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">get_db</span><span class="p">()),</span>
-    <span class="n">crud</span><span class="o">=</span><span class="n">crud_test</span><span class="p">,</span>
+    <span class="n">crud</span><span class="o">=</span><span class="n">crud_ai_test</span><span class="p">,</span>
     <span class="n">s3</span><span class="o">=</span><span class="n">get_minio</span><span class="p">(),</span>
     <span class="n">prioritize_internet_download</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">dev_init</span><span class="p">()</span>
 <span class="c1">## ************ DEV INITIALIZATION ONLY ************ ##</span>
 
 <span class="c1"># build ai router automagically</span>
-<span class="n">test_router</span> <span class="o">=</span> <span class="n">SentenceTransformersRouter</span><span class="p">(</span>
+<span class="n">document_vector_store_router</span> <span class="o">=</span> <span class="n">SentenceTransformersRouter</span><span class="p">(</span>
     <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;all-MiniLM-L6-v2&quot;</span><span class="p">,</span>
-    <span class="n">schema_base</span><span class="o">=</span><span class="n">crud_schemas</span><span class="p">,</span>
-    <span class="n">crud_base</span><span class="o">=</span><span class="n">crud_test</span><span class="p">,</span>
+    <span class="n">schema_base</span><span class="o">=</span><span class="n">vector_embedding_schemas</span><span class="p">,</span>
+    <span class="n">crud_ai_base</span><span class="o">=</span><span class="n">crud_ai_test</span><span class="p">,</span>
+    <span class="n">crud_base</span><span class="o">=</span><span class="n">crud_vector_test</span><span class="p">,</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/sentences&quot;</span><span class="p">,</span>
     <span class="n">allow_delete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="c1"># built pydantic data transfer schemas &amp; crud db services automagically</span>
+<span class="n">source_model_schemas</span> <span class="o">=</span> <span class="n">SchemaBase</span><span class="p">(</span>
+    <span class="n">SourceModel</span><span class="p">,</span>
+    <span class="n">optional_fields</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;downloaded_datetime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;private_url&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;public_url&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;embedding&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="n">crud_source_model</span> <span class="o">=</span> <span class="n">CRUDBase</span><span class="p">(</span><span class="n">SourceModel</span><span class="p">)</span>
+
+<span class="c1"># build sources router automagically</span>
+<span class="n">sources_router</span> <span class="o">=</span> <span class="n">RESTRouter</span><span class="p">(</span>
+    <span class="n">schema_base</span><span class="o">=</span><span class="n">source_model_schemas</span><span class="p">,</span>
+    <span class="n">crud_base</span><span class="o">=</span><span class="n">crud_source_model</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/sources&quot;</span><span class="p">,</span>
+    <span class="n">allow_delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="c1"># setup base up from routers</span>
 <span class="n">app_base</span> <span class="o">=</span> <span class="n">AppBase</span><span class="p">(</span>
-    <span class="n">crud_routers</span><span class="o">=</span><span class="p">[</span><span class="n">test_router</span><span class="p">],</span> <span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;Aimbase Inference Test App API&quot;</span>
+    <span class="n">crud_routers</span><span class="o">=</span><span class="p">[</span><span class="n">document_vector_store_router</span><span class="p">,</span> <span class="n">sources_router</span><span class="p">],</span>
+    <span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;Aimbase Inference Test App API&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># automagic and version app</span>
