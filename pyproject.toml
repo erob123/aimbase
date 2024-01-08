@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aimbase"
-version = "0.0.6"
+version = "0.0.7a0"
 description = "Declarative, instant REST APIs for base AI Models based on instarest, a FastAPI, Pydantic, SQLAlchemy, and PostgreSQL library, and MinIO."
 authors = ["Eric Robinson"]
 readme = "README.md"
