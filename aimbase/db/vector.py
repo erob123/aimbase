@@ -1,29 +1,16 @@
-from enum import Enum as CoreEnum
 from sqlalchemy import (
     Column,
     ForeignKey,
-    Integer,
     UUID,
     String,
-    Boolean,
-    Sequence,
-    Enum,
     DateTime,
-    ARRAY,
 )
 from sqlalchemy.orm import relationship
 from instarest import DeclarativeBase
 from pgvector.sqlalchemy import Vector
 
 
-class TagsEnum(str, CoreEnum):
-    TAG1 = "Tag 1"
-    TAG2 = "Tag 2"
-    TAG3 = "Tag 3"
-
-
 class SourceModel(DeclarativeBase):
-    tags = Column(ARRAY(Enum(TagsEnum), dimensions=1, as_tuple=True))
     title = Column(String())
     description = Column(String())
     downloaded_datetime = Column(DateTime)
