@@ -9,6 +9,7 @@ from ..db.vector import DocumentModel, SourceModel
 
 VectorStoreType = TypeVar("VectorStoreType", bound=DeclarativeBase)
 DocumentModelType = TypeVar("DocumentModelType", bound=DocumentModel)
+SourceModelType = TypeVar("SourceModelType", bound=SourceModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
@@ -128,26 +129,33 @@ class CRUDVectorStore(CRUDBase[VectorStoreType, CreateSchemaType, UpdateSchemaTy
         if not titles and not downloaded_datetime_start and not downloaded_datetime_end:
             return db_query
 
-        # join to get access to source metadata
-        db_query = db_query.join(
-            DocumentModel, DocumentModel.id == self.model.document_id
-        ).join(SourceModel, SourceModel.id == DocumentModel.source_id)
+        # join to get access to source metadata if this is inherited by vector store, not SourceModel or its subclass
+        metadata_table = self.model
+        if not issubclass(self.model, SourceModel):
+            metadata_table = SourceModel
+            db_query = db_query.join(
+                DocumentModel, DocumentModel.id == self.model.document_id
+            ).join(SourceModel, SourceModel.id == DocumentModel.source_id)
 
         if titles:
             title_filters = [
-                func.lower(SourceModel.title).contains(title.lower())
+                func.lower(metadata_table.title).contains(title.lower())
                 for title in titles
             ]
             db_query = db_query.filter(or_(*title_filters))
 
         if downloaded_datetime_start:
             db_query = db_query.filter(
-                SourceModel.downloaded_datetime >= downloaded_datetime_start
+                metadata_table.downloaded_datetime >= downloaded_datetime_start
             )
 
         if downloaded_datetime_end:
             db_query = db_query.filter(
-                SourceModel.downloaded_datetime <= downloaded_datetime_end
+                metadata_table.downloaded_datetime <= downloaded_datetime_end
             )
 
         return db_query
+
+
+class CRUDSource(CRUDVectorStore[SourceModelType, CreateSchemaType, UpdateSchemaType]):
+    pass

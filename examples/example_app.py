@@ -22,6 +22,7 @@ from aimbase.dependencies import get_minio
 from aimbase.crud.sentence_transformers_vector import (
     CRUDSentenceTransformersVectorStore,
 )
+from aimbase.crud.vector import CRUDSource
 from aimbase.db.vector import AllMiniVectorStore, SourceModel
 from instarest import (
     AppBase,
@@ -30,7 +31,6 @@ from instarest import (
     Initializer,
     get_db,
     RESTRouter,
-    CRUDBase,
 )
 
 from aimbase.services.sentence_transformers_inference import (
@@ -82,7 +82,7 @@ source_model_schemas = SchemaBase(
         "embedding",
     ],
 )
-crud_source_model = CRUDBase(SourceModel)
+crud_source_model = CRUDSource(SourceModel)
 
 # build sources router automagically
 sources_router = RESTRouter(
