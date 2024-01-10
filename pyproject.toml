@@ -8,7 +8,7 @@ packages = [{include = "aimbase"}]
 
 [tool.poetry.dependencies]
 python = "~3.11"
-instarest = "^0.0.10"
+instarest = "^0.0.11"
 minio = "^7.1.15"
 tqdm = "^4.65.0"
 pgvector = "^0.2.3"
