@@ -15,6 +15,19 @@ logger = LogConfig(LOGGER_NAME="minio.py").build_logger()
 
 # TODO: test hash calculation same both directions and for local folder calculation
 def build_client():
+    # don't build a client if no minio env vars are defined, user doesn't want minio
+    # inference services with prioritize internet set to True will avoid calling this
+    # empty client, so don't throw an error before those services start
+    if (
+        not get_aimbase_settings().minio_access_key
+        and not get_aimbase_settings().minio_secret_key
+        and not get_aimbase_settings().minio_endpoint_url
+        and not get_aimbase_settings().minio_bucket_name
+        and not get_aimbase_settings().minio_region
+        and not get_aimbase_settings().minio_secure
+    ):
+        return None
+
     if not get_aimbase_settings().minio_region:
         return Minio(
             get_aimbase_settings().minio_endpoint_url,
