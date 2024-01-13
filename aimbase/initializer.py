@@ -14,6 +14,17 @@ class AimbaseInitializer:
         ).build_logger()
 
     def init_minio_bucket(self, s3: Minio) -> None:
+        # don't try to init a bucket if the minio env vars aren't defined,
+        # allows aimbase to be used even if minio not desired
+        if (
+            not get_aimbase_settings().minio_access_key
+            and not get_aimbase_settings().minio_secret_key
+            and not get_aimbase_settings().minio_endpoint_url
+            and not get_aimbase_settings().minio_bucket_name
+            and not get_aimbase_settings().minio_region
+        ):
+            return
+
         bucket_name = get_aimbase_settings().minio_bucket_name
         try:
             if not s3.bucket_exists(bucket_name):

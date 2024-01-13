@@ -18,8 +18,9 @@ class SentenceTransformersInferenceService(BaseAIInferenceService):
         # init imports and download model from internet
         self.initialize()
 
-        # upload model to minio
-        self.upload_model_to_minio()
+        # upload model to minio if it isnt simply an internet only model storage
+        if not (self.s3 is None and self.prioritize_internet_download):
+            self.upload_model_to_minio()
 
         # delete the model from the cache and all files within directory
         shutil.rmtree(self.get_model_cache_path())

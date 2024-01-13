@@ -24,7 +24,6 @@ def build_client():
         and not get_aimbase_settings().minio_endpoint_url
         and not get_aimbase_settings().minio_bucket_name
         and not get_aimbase_settings().minio_region
-        and not get_aimbase_settings().minio_secure
     ):
         return None
 

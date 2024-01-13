@@ -28,6 +28,8 @@ class AimbaseSettings(CoreSettings):
     # validator to remove http:// or https:// from the minio_undpoint_url
     @validator("minio_endpoint_url", pre=True, always=True)
     def remove_http_or_https(cls, v: str) -> str:
+        if v is None:
+            return v
         if v.startswith("http://"):
             return v[len("http://") :]
         if v.startswith("https://"):
