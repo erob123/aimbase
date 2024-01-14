@@ -426,13 +426,13 @@ files = [
 
 [[package]]
 name = "instarest"
-version = "0.0.12"
+version = "0.0.13"
 description = "Declarative, instant REST APIs based on FastAPI, Pydantic, SQLAlchemy, and PostgreSQL"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "instarest-0.0.12-py3-none-any.whl", hash = "sha256:4363deb877cd6e43561b45a8c773fa1f6964119380bb44b604c2817a2e00886a"},
-    {file = "instarest-0.0.12.tar.gz", hash = "sha256:130323d8476e5cc4e9775e88d40bc229047bbbd153af110077a7430e4605116a"},
+    {file = "instarest-0.0.13-py3-none-any.whl", hash = "sha256:83aa443a4e8d4d80d8e984484fc6ec4f34932d748e3a84f0183af3f4de90d0e8"},
+    {file = "instarest-0.0.13.tar.gz", hash = "sha256:6ca43441f058c3f0a39cf4b80dc417492f70faa88da73ac5f0d25dfb3d52830a"},
 ]
 
 [package.dependencies]
@@ -1064,4 +1064,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "c80e39850ff1804dc98e7db8b5c37004e07b9651184f076c6986829a6bc5b435"
+content-hash = "f98296333b75a8e6e82f38a210a50b7594f4861120a36967dc5a703124b6e883"
